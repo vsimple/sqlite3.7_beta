@@ -844,6 +844,10 @@ struct sqlite3 {
   void (*xRollbackCallback)(void*); /* Invoked at every commit. */
   void *pUpdateArg;
   void (*xUpdateCallback)(void*,int, const char*,const char*,sqlite_int64);
+    //vsimple
+    /* Callback used to add a column programmatically to a new table */
+  int (*xAddExtraColumn)(void*,void*,int,void*,char**);
+  void *pAddColumnArg;
 #ifndef SQLITE_OMIT_WAL
   int (*xWalCallback)(void *, sqlite3 *, const char *, int);
   void *pWalArg;

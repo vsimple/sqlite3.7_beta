@@ -26,6 +26,7 @@
 # include "sqliteicu.h"
 #endif
 
+#include "vsimple.h"
 #ifndef SQLITE_AMALGAMATION
 /* IMPLEMENTATION-OF: R-46656-45156 The sqlite3_version[] string constant
 ** contains the text of SQLITE_VERSION macro. 
@@ -1367,6 +1368,22 @@ void *sqlite3_rollback_hook(
   return pRet;
 }
 
+// vimsple
+/*
+** Register a callback to be invoked each time a new table is created,
+** using this database connection.
+*/
+int sqlite3_set_add_extra_column(
+  sqlite3 *db,
+  int (*xAddExtraColumn)(void*,void*,int,void*,char**),
+  void *pUserData
+){
+  sqlite3_mutex_enter(db->mutex);
+  db->xAddExtraColumn = xAddExtraColumn;
+  db->pAddColumnArg = pUserData;
+  sqlite3_mutex_leave(db->mutex);
+  return SQLITE_OK;
+}
 #ifndef SQLITE_OMIT_WAL
 /*
 ** The sqlite3_wal_hook() callback registered by sqlite3_wal_autocheckpoint().
@@ -2298,6 +2315,10 @@ static int openDatabase(
   }
 #endif
 
+    // vsimple
+  if( !db->mallocFailed ){
+    rc = sqlite3SelinuxInit(db);
+  }
   sqlite3Error(db, rc, 0);
 
   /* -DSQLITE_DEFAULT_LOCKING_MODE=1 makes EXCLUSIVE the default locking

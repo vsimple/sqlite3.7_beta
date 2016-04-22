@@ -26,7 +26,8 @@ BCC = @BUILD_CC@ @BUILD_CFLAGS@
 # will run on the target platform.  (BCC and TCC are usually the
 # same unless your are cross-compiling.)
 #
-TCC = @CC@ @CPPFLAGS@ @CFLAGS@ -I. -I${TOP}/src -I${TOP}/ext/rtree
+TCC = @CC@ @CPPFLAGS@ @CFLAGS@ -I. -I${TOP}/src -I${TOP}/ext/rtree \
+	-I${TOP}/ext/vsimple
 
 # Define this for the autoconf-based build, so that the code knows it can
 # include the generated config.h
@@ -178,7 +179,7 @@ LIBOBJS0 = alter.lo analyze.lo attach.lo auth.lo \
          table.lo tokenize.lo trigger.lo \
          update.lo util.lo vacuum.lo \
          vdbe.lo vdbeapi.lo vdbeaux.lo vdbeblob.lo vdbemem.lo vdbesort.lo \
-         vdbetrace.lo wal.lo walker.lo where.lo utf.lo vtab.lo
+         vdbetrace.lo wal.lo walker.lo where.lo utf.lo vtab.lo vsimple.lo
 
 # Object files for the amalgamation.
 #
@@ -325,6 +326,9 @@ SRC += \
   $(TOP)/ext/rtree/rtree.h \
   $(TOP)/ext/rtree/rtree.c
 
+SRC += \
+  $(TOP)/ext/vsimple/vsimple.h \
+  $(TOP)/ext/vsimple/vsimple.c 
 
 # Generated source code files
 #
@@ -473,6 +477,8 @@ EXTHDR += \
 EXTHDR += \
   $(TOP)/ext/rtree/sqlite3rtree.h
 
+EXTHDR += \
+  $(TOP)/ext/vsimple/vsimple.h 
 # This is the default Makefile target.  The objects listed here
 # are what get build when you type just "make" with no arguments.
 #
@@ -862,6 +868,8 @@ fts3_write.lo:	$(TOP)/ext/fts3/fts3_write.c $(HDR) $(EXTHDR)
 rtree.lo:	$(TOP)/ext/rtree/rtree.c $(HDR) $(EXTHDR)
 	$(LTCOMPILE) -DSQLITE_CORE -c $(TOP)/ext/rtree/rtree.c
 
+selinux.lo:	$(TOP)/ext/vsimple/vsimple.c $(HDR) $(EXTHDR)
+	$(LTCOMPILE) -DSQLITE_CORE -c $(TOP)/ext/vsimple/vsimple.c
 
 # Rules to build the 'testfixture' application.
 #

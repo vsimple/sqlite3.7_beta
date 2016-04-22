@@ -679,6 +679,15 @@ void sqlite3Insert(
     }
   }
 
+  // vsimple 419
+
+      for(i=0; i<pTab->nCol; i++){
+        if(strcmp(pTab->aCol[i].zName, "vTAG") == 0) {
+            //nHidden += (IsHiddenColumn(&pTab->aCol[i]) ? 1 : 0);
+            pTab->aCol[i].isHidden = 1;
+             break;
+        }
+      }
   /* Make sure the number of columns in the source data matches the number
   ** of columns to be inserted into the table.
   */
@@ -687,6 +696,13 @@ void sqlite3Insert(
       nHidden += (IsHiddenColumn(&pTab->aCol[i]) ? 1 : 0);
     }
   }
+  // vsimple419
+
+  else { // vsimple_add  no sense
+    for(i=0; i<pTab->nCol; i++){
+            nHidden += (IsHiddenColumn(&pTab->aCol[i]) ? 1 : 0);
+    }
+}
   if( pColumn==0 && nColumn && nColumn!=(pTab->nCol-nHidden) ){
     sqlite3ErrorMsg(pParse, 
        "table %S has %d columns but %d values were supplied",
@@ -940,7 +956,7 @@ void sqlite3Insert(
       }
       if( pColumn==0 ){
         if( IsHiddenColumn(&pTab->aCol[i]) ){
-          assert( IsVirtual(pTab) );
+          // assert( IsVirtual(pTab) );
           j = -1;
           nHidden++;
         }else{

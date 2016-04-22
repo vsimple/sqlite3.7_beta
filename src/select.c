@@ -3355,8 +3355,16 @@ static int selectExpander(Walker *pWalker, Select *p){
             ** for virtual tables), do not include it in the expanded
             ** result-set list.
             */
+	    // vsimple421
+            //printf("select coumn name: %s\n", pTab->aCol[j]);
+            //#ifdef SQLITE_ENABLE_SELINUX
+            if( strcmp(pTab->aCol[j].zName, "vTAG") == 0 ){
+                //printf("2 select coumn name: %s\n", pTab->aCol[j]);
+                continue;
+            }
+            //#endif /* SQLITE_ENABLE_SELINUX */
             if( IsHiddenColumn(&pTab->aCol[j]) ){
-              assert(IsVirtual(pTab));
+              //assert(IsVirtual(pTab));
               continue;
             }
 

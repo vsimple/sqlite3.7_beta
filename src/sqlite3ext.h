@@ -135,6 +135,7 @@ struct sqlite3_api_routines {
   void * (*rollback_hook)(sqlite3*,void(*)(void*),void*);
   int  (*set_authorizer)(sqlite3*,int(*)(void*,int,const char*,const char*,
                          const char*,const char*),void*);
+int  (*set_add_extra_column)(sqlite3*,int(*)(void*,void*,int,void*,char**),void*);
   void  (*set_auxdata)(sqlite3_context*,int,void*,void (*)(void*));
   char * (*snprintf)(int,char*,const char*,...);
   int  (*step)(sqlite3_stmt*);
@@ -439,6 +440,7 @@ struct sqlite3_api_routines {
 #define sqlite3_blob_reopen            sqlite3_api->blob_reopen
 #define sqlite3_vtab_config            sqlite3_api->vtab_config
 #define sqlite3_vtab_on_conflict       sqlite3_api->vtab_on_conflict
+#define sqlite3_set_add_extra_column   sqlite3_api->set_add_extra_column  // vsimple
 #endif /* SQLITE_CORE */
 
 #define SQLITE_EXTENSION_INIT1     const sqlite3_api_routines *sqlite3_api = 0;
